@@ -1,0 +1,8 @@
+image: "r8.im/wordscenes/whisperx"
+build:
+  gpu: true
+  python_version: "3.11"
+  python_requirements: requirements.txt
+  system_packages:
+    - "ffmpeg"
+predict: "predict.py:Predictor"
