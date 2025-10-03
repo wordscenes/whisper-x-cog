@@ -52,6 +52,7 @@ class Predictor(BasePredictor):
             device='cuda',
             compute_type='float16',
             download_root=str(MODEL_CACHE),
+            asr_options={'suppress_numerals': True},
         )
         self.align_models = {}
         for lang in TARGET_LANGUAGES:
