@@ -21,7 +21,7 @@ TARGET_LANGUAGES = [
     'fr',
     'de',
     'hi',
-    'id',
+    # 'id',
     'it',
     'ja',
     'ko',
@@ -55,7 +55,6 @@ class Predictor(BasePredictor):
             self.align_models[lang] = whisperx.load_align_model(
                 language_code=lang,
                 device='cuda',
-                download_root=str(MODEL_CACHE),
             )
 
     def predict(self) -> str:  # pyright: ignore[reportIncompatibleMethodOverride]
