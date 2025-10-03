@@ -37,7 +37,6 @@ OUR_ALIGN_MODELS_HF = {
 
 def report_versions():
     print(f'Using whisperx version {version("whisperx")}')
-    print('*Not* using faster-whisper')  # see "rejected experiments" in readme
     print(f'Using Whisper model {WHISPER_MODEL}')
 
 
@@ -63,5 +62,30 @@ class Predictor(BasePredictor):
                 model_dir=str(MODEL_CACHE),
             )
 
-    def predict(self) -> str:  # pyright: ignore[reportIncompatibleMethodOverride]
-        return "Hello, world!"
+    def predict(  # pyright: ignore[reportIncompatibleMethodOverride] (Pyright complains about **kwargs missing, but cog doesn't support untyped parameters)
+        self,
+        audio_path: Path = Input(description='Audio to transcribe or align'),
+        # mode: str = Input(default="transcribe", choices=["transcribe", "align"], description="Mode: 'transcribe' to generate transcript, 'align' to align provided text"),
+        # text: str = Input(default="", description="Text to align with audio (required when mode='align')"),
+        language: str = Input(default="en", description="Language to transcribe"),
+    ) -> str:
+        report_versions()
+
+        audio = whisperx.load_audio(audio_path)
+        result = self.model.transcribe(audio, language=language)
+
+        align_model = self.align_models[language]
+        result = whisperx.align(
+            result,
+            align_model[0],
+            align_model[1],
+            audio,
+            'cuda',
+            return_char_alignments=False,
+        )
+
+        if not isinstance(result, dict) and callable(getattr(result, 'to_dict')):
+            result = result.to_dict()
+        output = json.dumps(result, allow_nan=True, ensure_ascii=False)
+
+        return output
