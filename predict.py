@@ -60,6 +60,7 @@ class Predictor(BasePredictor):
                 language_code=lang,
                 device='cuda',
                 model_name = OUR_ALIGN_MODELS_HF.get(lang, None),
+                model_dir=str(MODEL_CACHE),
             )
 
     def predict(self) -> str:  # pyright: ignore[reportIncompatibleMethodOverride]
