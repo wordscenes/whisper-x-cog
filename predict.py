@@ -65,14 +65,18 @@ class Predictor(BasePredictor):
     def predict(  # pyright: ignore[reportIncompatibleMethodOverride] (Pyright complains about **kwargs missing, but cog doesn't support untyped parameters)
         self,
         audio_path: Path = Input(description='Audio to transcribe or align'),
-        # mode: str = Input(default="transcribe", choices=["transcribe", "align"], description="Mode: 'transcribe' to generate transcript, 'align' to align provided text"),
-        # text: str = Input(default="", description="Text to align with audio (required when mode='align')"),
+        mode: str = Input(default="transcribe", choices=["transcribe", "align"], description="Mode: 'transcribe' to generate transcript, 'align' to align provided segments"),
+        segments: str = Input(default="", description="Segments (JSON array with text, start, and end keys) to align with audio (required when mode='align')"),
         language: str = Input(default="en", description="Language to transcribe"),
     ) -> str:
         report_versions()
 
         audio = whisperx.load_audio(audio_path)
-        result = self.model.transcribe(audio, language=language)
+        
+        if mode == "transcribe":
+            result = self.model.transcribe(audio, language=language)
+        else:
+            result = {'segments': json.loads(segments)}
 
         align_model = self.align_models[language]
         result = whisperx.align(
