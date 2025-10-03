@@ -21,7 +21,7 @@ TARGET_LANGUAGES = [
     'fr',
     'de',
     'hi',
-    # 'id',
+    'id',
     'it',
     'ja',
     'ko',
@@ -30,6 +30,10 @@ TARGET_LANGUAGES = [
     'es',
     'tr',
 ]
+
+OUR_ALIGN_MODELS_HF = {
+    'id': 'indonesian-nlp/wav2vec2-large-xlsr-indonesian',
+}
 
 def report_versions():
     print(f'Using whisperx version {version("whisperx")}')
@@ -55,6 +59,7 @@ class Predictor(BasePredictor):
             self.align_models[lang] = whisperx.load_align_model(
                 language_code=lang,
                 device='cuda',
+                model_name = OUR_ALIGN_MODELS_HF.get(lang, None),
             )
 
     def predict(self) -> str:  # pyright: ignore[reportIncompatibleMethodOverride]
