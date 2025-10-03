@@ -74,9 +74,11 @@ class Predictor(BasePredictor):
 
         audio = whisperx.load_audio(audio_path)
         
-        if mode == "transcribe":
+        if mode == 'transcribe':
             result = self.model.transcribe(audio, language=language)
         else:
+            if segments == '':
+                raise ValueError('Segments are required when mode is align')
             result = {'segments': json.loads(segments)}
 
         align_model = self.align_models[language]
