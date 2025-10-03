@@ -76,7 +76,7 @@ class Predictor(BasePredictor):
 
         align_model = self.align_models[language]
         result = whisperx.align(
-            result,
+            result['segments'],
             align_model[0],
             align_model[1],
             audio,
