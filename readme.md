@@ -80,4 +80,4 @@ If you get `You are not logged in to Replicate. Run 'cog login' and try again.`,
 * Whisper model "large-v3" does horribly on the Shrek test, replacing many phrases with "ご視聴ありがとうございました" (others have also reported "thank you for watching" hallucinations in English). See https://deepgram.com/learn/whisper-v3-results for some validating evidence that this model severely underperforms vs. "large-v2".
 * [`faster-whisper`](https://github.com/SYSTRAN/faster-whisper) (version "0.10.0") degrades accuracy on the Shrek test, omitting one sentence at the end of the clip ("よし、もう満杯だ"), as well as reducing the expressiveness of the onomatopetic katakana expressions. It is faster, but we want accuracy.
 
-Note: WhisperX v3 uses `faster-whisper` by default, consider switching to WhisperX v2.
+Note: WhisperX v3 uses `faster-whisper` by default, we should consider switching to WhisperX v2.
