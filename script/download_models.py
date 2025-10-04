@@ -9,4 +9,4 @@ from predict import Predictor
 
 # Running prediction once will trigger the download of the model
 p = Predictor()
-p.setup()
+p.setup(download_all_align_models=True)
